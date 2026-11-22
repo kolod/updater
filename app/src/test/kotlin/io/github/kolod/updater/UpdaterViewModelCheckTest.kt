@@ -46,6 +46,10 @@ class UpdaterViewModelCheckTest {
         source = source,
         reader = reader,
         store = LastCheckStore(File(folder.root, "last.json")),
+        downloader = FakeDownloader(folder.newFolder()),
+        inspector = FakeInspector(),
+        installer = FakeInstaller(reader),
+        canInstall = { true },
         clock = { now },
         io = dispatcher,
     )

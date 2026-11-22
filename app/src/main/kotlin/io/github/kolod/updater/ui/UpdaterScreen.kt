@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -23,7 +24,14 @@ import io.github.kolod.updater.R
 import io.github.kolod.updater.UpdaterUiState
 
 @Composable
-fun UpdaterScreen(state: UpdaterUiState, onCheck: () -> Unit, onCancel: () -> Unit) {
+fun UpdaterScreen(
+    state: UpdaterUiState,
+    onCheck: () -> Unit,
+    onCancelCheck: () -> Unit,
+    onInstall: (String) -> Unit,
+    onUpdateAll: () -> Unit,
+    onCancelInstall: (String) -> Unit,
+) {
     Scaffold(modifier = Modifier.fillMaxSize()) { padding ->
         LazyColumn(
             modifier = Modifier.padding(padding),
@@ -31,20 +39,26 @@ fun UpdaterScreen(state: UpdaterUiState, onCheck: () -> Unit, onCancel: () -> Un
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             item {
-                Header(state, onCheck, onCancel)
+                Header(state, onCheck, onCancelCheck, onUpdateAll)
             }
-            items(state.apps, key = { it.app.id }) { row -> AppRow(row) }
+            items(state.apps, key = { it.app.id }) { row ->
+                AppRow(
+                    row = row,
+                    onInstall = { onInstall(row.app.id) },
+                    onCancelInstall = { onCancelInstall(row.app.id) },
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun Header(state: UpdaterUiState, onCheck: () -> Unit, onCancel: () -> Unit) {
+private fun Header(state: UpdaterUiState, onCheck: () -> Unit, onCancelCheck: () -> Unit, onUpdateAll: () -> Unit) {
     Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(stringResource(R.string.app_name), style = MaterialTheme.typography.headlineMedium)
         if (state.isChecking) {
             LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-            OutlinedButton(onClick = onCancel, modifier = Modifier.fillMaxWidth()) {
+            OutlinedButton(onClick = onCancelCheck, modifier = Modifier.fillMaxWidth()) {
                 Text(stringResource(R.string.cancel))
             }
             Text(stringResource(R.string.checking), style = MaterialTheme.typography.bodyMedium)
@@ -65,6 +79,11 @@ private fun Header(state: UpdaterUiState, onCheck: () -> Unit, onCancel: () -> U
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.primary,
             )
+            if (!state.anyBusy) {
+                FilledTonalButton(onClick = onUpdateAll, modifier = Modifier.fillMaxWidth()) {
+                    Text(stringResource(R.string.update_all))
+                }
+            }
         }
     }
 }

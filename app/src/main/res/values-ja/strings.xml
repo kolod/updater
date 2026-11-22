@@ -24,6 +24,15 @@
         <item quantity="other">%d 件のアップデートがあります</item>
     </plurals>
 
+    <string name="install">インストール</string>
+    <string name="update">アップデート</string>
+    <string name="update_all">すべてアップデート</string>
+    <string name="state_queued">待機中</string>
+    <string name="download_progress">ダウンロード中: %1$s / %2$s</string>
+    <string name="state_verifying">検証中…</string>
+    <string name="state_awaiting_confirmation">確認をお待ちしています</string>
+    <string name="state_installed">インストールしました</string>
+
     <string name="failure_offline">GitHub に接続できません</string>
     <string name="failure_rate_limited">GitHub のリクエスト上限に達しました</string>
     <string name="failure_rate_limited_until">GitHub のリクエスト上限に達しました。%1$s 以降にもう一度お試しください</string>

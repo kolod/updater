@@ -25,6 +25,15 @@
         <item quantity="other">%d updates available</item>
     </plurals>
 
+    <string name="install">Install</string>
+    <string name="update">Update</string>
+    <string name="update_all">Update all</string>
+    <string name="state_queued">Waiting in queue</string>
+    <string name="download_progress">Downloading: %1$s of %2$s</string>
+    <string name="state_verifying">Verifying…</string>
+    <string name="state_awaiting_confirmation">Waiting for your confirmation</string>
+    <string name="state_installed">Installed</string>
+
     <string name="failure_offline">No connection to GitHub</string>
     <string name="failure_rate_limited">GitHub request limit reached</string>
     <string name="failure_rate_limited_until">GitHub request limit reached. Try again after %1$s</string>

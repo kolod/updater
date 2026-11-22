@@ -27,6 +27,15 @@
         <item quantity="other">Доступно %d оновлення</item>
     </plurals>
 
+    <string name="install">Встановити</string>
+    <string name="update">Оновити</string>
+    <string name="update_all">Оновити все</string>
+    <string name="state_queued">У черзі</string>
+    <string name="download_progress">Завантаження: %1$s з %2$s</string>
+    <string name="state_verifying">Перевірка файлу…</string>
+    <string name="state_awaiting_confirmation">Очікування вашого підтвердження</string>
+    <string name="state_installed">Встановлено</string>
+
     <string name="failure_offline">Немає зʼєднання з GitHub</string>
     <string name="failure_rate_limited">Досягнуто ліміт запитів GitHub</string>
     <string name="failure_rate_limited_until">Досягнуто ліміт запитів GitHub. Спробуйте після %1$s</string>
