@@ -142,10 +142,10 @@ forbids handing any APK to the installer unverified, so US2 depends on US3's pur
 
 **Independent Test**: Publish a newer updater release, check, install; the app restarts at the new version (quickstart §4).
 
-- [ ] T045 [P] [US4] Write `app/src/test/kotlin/…/updater/UpdaterViewModelSelfUpdateTest.kt`: the self entry goes through the identical verify/install path (no special-casing besides order); "Update all" queue puts the self entry last regardless of catalog order; failure of another app does not skip the self update decision; after a self-update the next check shows the new version
-- [ ] T046 [US4] Implement the queue ordering in `UpdaterViewModel.updateAll()` (`isSelf` last) until T045 passes
-- [ ] T047 [P] [US4] Create `.github/workflows/release.yml` modelled on `kolod/circuitopedia`: tag `v*.*.*` must be on `main`, signing job in the approval-gated `release` environment with read-only permissions, `versionName` from the tag, `versionCode` from `run_number`, rename to `updater.apk`, generate `updater.apk.sha256` (`sha256sum` format), separate publish job without secrets uploading both files
-- [ ] T048 [P] [US4] Document the one-time release prerequisites in `README.md`: create the signing keystore, the `release` environment and the secrets `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`; and that the updater's own APK must keep the same signing key forever
+- [X] T045 [P] [US4] Write `app/src/test/kotlin/…/updater/UpdaterViewModelSelfUpdateTest.kt`: the self entry goes through the identical verify/install path (no special-casing besides order); "Update all" queue puts the self entry last regardless of catalog order; failure of another app does not skip the self update decision; after a self-update the next check shows the new version
+- [X] T046 [US4] Implement the queue ordering in `UpdaterViewModel.updateAll()` (`isSelf` last) until T045 passes
+- [X] T047 [P] [US4] Create `.github/workflows/release.yml` modelled on `kolod/circuitopedia`: tag `v*.*.*` must be on `main`, signing job in the approval-gated `release` environment with read-only permissions, `versionName` from the tag, `versionCode` from `run_number`, rename to `updater.apk`, generate `updater.apk.sha256` (`sha256sum` format), separate publish job without secrets uploading both files
+- [X] T048 [P] [US4] Document the one-time release prerequisites in `README.md`: create the signing keystore, the `release` environment and the secrets `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`; and that the updater's own APK must keep the same signing key forever
 
 **Checkpoint**: Self-update proven by tests; release pipeline ready for the first tag.
 
@@ -157,10 +157,10 @@ forbids handing any APK to the installer unverified, so US2 depends on US3's pur
 
 **Independent Test**: Offline, rate-limited, missing-file and storage-full conditions each show their own message; retry re-runs only that app (quickstart scenarios 2, 10; US5 acceptance).
 
-- [ ] T049 [P] [US5] Write `app/src/test/kotlin/…/updater/UpdaterViewModelRecoveryTest.kt`: `retry(appId)` re-checks/re-installs only that app; rate-limited state carries the reset time and sends no further requests; `NoInstallableFile` shown only for that app; `StorageFull` when free space < asset size + 10 % (injectable free-space provider) before any download starts; retry after cancel works
-- [ ] T050 [US5] Implement `retry(appId)`, the free-space pre-check in `ApkDownloader.kt`/`UpdaterViewModel.kt`, and the `ENOSPC` → `StorageFull` mapping until T049 passes
-- [ ] T051 [P] [US5] Extend `ui/Messages.kt` and `ui/AppRow.kt`: per-reason message text (rate-limit message formats the reset time with the user's locale), Retry button on failed rows
-- [ ] T052 [US5] Add US5 strings (rate limit with time, no installable file, storage full, retry, server error, bad response) in `app/src/main/res/values*/strings.xml` for all six locales
+- [X] T049 [P] [US5] Write `app/src/test/kotlin/…/updater/UpdaterViewModelRecoveryTest.kt`: `retry(appId)` re-checks/re-installs only that app; rate-limited state carries the reset time and sends no further requests; `NoInstallableFile` shown only for that app; `StorageFull` when free space < asset size + 10 % (injectable free-space provider) before any download starts; retry after cancel works
+- [X] T050 [US5] Implement `retry(appId)`, the free-space pre-check in `ApkDownloader.kt`/`UpdaterViewModel.kt`, and the `ENOSPC` → `StorageFull` mapping until T049 passes
+- [X] T051 [P] [US5] Extend `ui/Messages.kt` and `ui/AppRow.kt`: per-reason message text (rate-limit message formats the reset time with the user's locale), Retry button on failed rows
+- [X] T052 [US5] Add US5 strings (rate limit with time, no installable file, storage full, retry, server error, bad response) in `app/src/main/res/values*/strings.xml` for all six locales
 
 **Checkpoint**: All five stories independently verified.
 

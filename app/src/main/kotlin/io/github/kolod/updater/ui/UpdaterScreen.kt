@@ -31,6 +31,7 @@ fun UpdaterScreen(
     onInstall: (String) -> Unit,
     onUpdateAll: () -> Unit,
     onCancelInstall: (String) -> Unit,
+    onRetry: (String) -> Unit,
 ) {
     Scaffold(modifier = Modifier.fillMaxSize()) { padding ->
         LazyColumn(
@@ -46,6 +47,7 @@ fun UpdaterScreen(
                     row = row,
                     onInstall = { onInstall(row.app.id) },
                     onCancelInstall = { onCancelInstall(row.app.id) },
+                    onRetry = { onRetry(row.app.id) },
                 )
             }
         }

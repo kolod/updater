@@ -46,6 +46,7 @@ class MainActivity : ComponentActivity() {
                     onInstall = viewModel::install,
                     onUpdateAll = viewModel::updateAll,
                     onCancelInstall = viewModel::cancelInstall,
+                    onRetry = viewModel::retry,
                 )
             }
         }

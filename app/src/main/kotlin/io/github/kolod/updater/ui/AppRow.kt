@@ -10,6 +10,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -29,6 +30,7 @@ fun AppRow(
     row: AppState,
     onInstall: () -> Unit,
     onCancelInstall: () -> Unit,
+    onRetry: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(modifier = modifier.fillMaxWidth()) {
@@ -59,6 +61,7 @@ fun AppRow(
             }
             (row.status as? UpdateStatus.Failed)?.let {
                 Text(failureText(it.reason), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error)
+                OutlinedButton(onClick = onRetry, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.retry)) }
             }
             if (row.freshness == Freshness.Stale && (row.latestKnown != null || row.status is UpdateStatus.Failed)) {
                 Text(

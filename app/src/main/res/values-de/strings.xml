@@ -25,6 +25,7 @@
         <item quantity="other">%d Updates verfügbar</item>
     </plurals>
 
+    <string name="retry">Erneut versuchen</string>
     <string name="install">Installieren</string>
     <string name="update">Aktualisieren</string>
     <string name="update_all">Alle aktualisieren</string>

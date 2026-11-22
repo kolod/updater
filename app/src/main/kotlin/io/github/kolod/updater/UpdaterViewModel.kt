@@ -1,6 +1,7 @@
 package io.github.kolod.updater
 
 import android.app.Application
+import android.os.StatFs
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -98,6 +99,8 @@ class UpdaterViewModel(
     private val clock: () -> Long = System::currentTimeMillis,
     private val io: CoroutineDispatcher = Dispatchers.IO,
     private val startupCleanup: () -> Unit = {},
+    /** Free bytes in the download directory; checked before a download starts. */
+    private val freeSpace: () -> Long = { Long.MAX_VALUE },
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(UpdaterUiState(apps = catalog.map { unknownRow(it, null) }))
@@ -111,6 +114,7 @@ class UpdaterViewModel(
     private var activeId: String? = null
     private var waitingForPermission = false
     private val visible = MutableStateFlow(true)
+    private val rechecking = mutableSetOf<String>()
 
     init {
         viewModelScope.launch {
@@ -221,6 +225,27 @@ class UpdaterViewModel(
         UpdateStatus.NoRelease, is UpdateStatus.Failed -> null
     }
 
+    /** Repeats only what failed for one app: its check, or its installation. */
+    fun retry(appId: String) {
+        val row = _state.value.apps.firstOrNull { it.app.id == appId } ?: return
+        when {
+            row.attempt is InstallAttempt.Failed -> install(appId)
+            row.status is UpdateStatus.Failed -> recheck(row.app)
+        }
+    }
+
+    private fun recheck(app: ManagedApp) {
+        if (checkJob?.isActive == true || !rechecking.add(app.id)) return
+        viewModelScope.launch {
+            try {
+                checkOne(app, AtomicReference(null))
+                persist()
+            } finally {
+                rechecking.remove(app.id)
+            }
+        }
+    }
+
     // ---- Installing -------------------------------------------------------------------------
 
     fun install(appId: String) = enqueue(listOf(appId))
@@ -329,7 +354,13 @@ class UpdaterViewModel(
         }
         var file: File? = null
         try {
-            setAttempt(id, InstallAttempt.Downloading(0, release.apk?.size ?: 0))
+            val size = release.apk?.size ?: 0
+            // Fail early and clearly instead of filling the disk with a download that cannot finish.
+            if (size > 0 && freeSpace() < size + size / 10) {
+                fail(id, FailureReason.StorageFull)
+                return
+            }
+            setAttempt(id, InstallAttempt.Downloading(0, size))
             val download = downloader.download(app, release) { done, total ->
                 setAttempt(id, InstallAttempt.Downloading(done, total))
             }
@@ -413,6 +444,7 @@ class UpdaterViewModel(
                     installer = SessionInstaller(application),
                     canInstall = { application.packageManager.canRequestPackageInstalls() },
                     startupCleanup = files::wipeAll,
+                    freeSpace = { StatFs(application.cacheDir.path).availableBytes },
                 )
             }
         }

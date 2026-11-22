@@ -27,6 +27,7 @@
         <item quantity="other">Доступно %d оновлення</item>
     </plurals>
 
+    <string name="retry">Повторити</string>
     <string name="install">Встановити</string>
     <string name="update">Оновити</string>
     <string name="update_all">Оновити все</string>

@@ -24,6 +24,7 @@
         <item quantity="other">%d 件のアップデートがあります</item>
     </plurals>
 
+    <string name="retry">再試行</string>
     <string name="install">インストール</string>
     <string name="update">アップデート</string>
     <string name="update_all">すべてアップデート</string>
