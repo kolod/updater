@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.kotlin.jvm)
 }
@@ -8,6 +10,18 @@ dependencies {
     compileOnly(libs.org.json)
     testImplementation(libs.org.json)
     testImplementation(libs.junit)
+}
+
+// The Android module consumes these classes, so target the bytecode level the app understands.
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
+    }
 }
 
 tasks.test {

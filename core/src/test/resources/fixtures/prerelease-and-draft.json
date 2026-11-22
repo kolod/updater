@@ -1,0 +1,8 @@
+[
+  {"tag_name": "v9.0.0", "draft": true, "prerelease": false, "assets": [
+    {"name": "circuitopedia.apk", "size": 100, "browser_download_url": "https://github.com/kolod/circuitopedia/releases/download/v9.0.0/circuitopedia.apk"}]},
+  {"tag_name": "v8.0.0-rc.1", "draft": false, "prerelease": true, "assets": [
+    {"name": "circuitopedia.apk", "size": 100, "browser_download_url": "https://github.com/kolod/circuitopedia/releases/download/v8.0.0-rc.1/circuitopedia.apk"}]},
+  {"tag_name": "v0.2.0", "draft": false, "prerelease": false, "assets": [
+    {"name": "circuitopedia.apk", "size": 1988722, "browser_download_url": "https://github.com/kolod/circuitopedia/releases/download/v0.2.0/circuitopedia.apk", "digest": "sha256:5d0186f1aea5c8d45a8f7631230cb572dc35e9113101c35dd83aacbb77de9659"}]}
+]

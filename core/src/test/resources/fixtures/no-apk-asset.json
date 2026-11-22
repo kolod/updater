@@ -1,0 +1,6 @@
+[
+  {"tag_name": "v0.3.0", "draft": false, "prerelease": false, "assets": [
+    {"name": "notes.txt", "size": 10, "browser_download_url": "https://github.com/kolod/circuitopedia/releases/download/v0.3.0/notes.txt"}]},
+  {"tag_name": "v0.2.0", "draft": false, "prerelease": false, "assets": [
+    {"name": "circuitopedia.apk", "size": 1988722, "browser_download_url": "https://github.com/kolod/circuitopedia/releases/download/v0.2.0/circuitopedia.apk"}]}
+]
