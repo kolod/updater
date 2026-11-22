@@ -1,6 +1,12 @@
 <!--
 Sync Impact Report
 ==================
+Version change: 1.0.0 → 1.0.1
+Bump rationale: PATCH — clarification found during implementation (spec 001): the release APK carries
+one AndroidX-injected signature permission private to the app; it is tolerated explicitly and CI now
+inspects the built APK instead of the source manifest. No principle changed.
+
+--- History ---
 Version change: (template) → 1.0.0
 Bump rationale: initial ratification (self-update and the Ghost BMS applicationId were settled
 before ratification was finalized).
@@ -200,7 +206,10 @@ verifiable release path it enforces on the apps it manages.
   used by the managed apps (37 at ratification).
 - UI: Jetpack Compose, portrait-first, following the orientation approach of the managed apps
   unless a spec decides otherwise.
-- Permissions: `INTERNET` and `REQUEST_INSTALL_PACKAGES` (required to install APKs). Visibility of
+- Permissions: `INTERNET` and `REQUEST_INSTALL_PACKAGES` (required to install APKs). The only
+  tolerated extra is the signature-level `<applicationId>.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION`
+  that AndroidX Core adds on its own: it is private to the app and grants no capability. CI checks the
+  permissions of the built release APK, not only the source manifest. Visibility of
   the managed apps MUST be obtained via explicit `<queries>` entries for the catalog's package
   names, NOT via `QUERY_ALL_PACKAGES`.
 - Networking: GitHub REST API (`/repos/{owner}/{repo}/releases`), unauthenticated. The unauthenticated
@@ -241,4 +250,4 @@ verifiable release path it enforces on the apps it manages.
 - Compliance is reviewed at each Constitution Check during planning and again before every merge
   into `main`.
 
-**Version**: 1.0.0 | **Ratified**: 2026-11-22 | **Last Amended**: 2026-11-22
+**Version**: 1.0.1 | **Ratified**: 2026-11-22 | **Last Amended**: 2026-11-22

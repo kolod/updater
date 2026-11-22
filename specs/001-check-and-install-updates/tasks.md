@@ -168,10 +168,10 @@ forbids handing any APK to the installer unverified, so US2 depends on US3's pur
 
 ## Phase 8: Polish & Cross-Cutting Concerns
 
-- [ ] T053 [P] Run `./gradlew test lint :app:assembleRelease` locally (unsigned) and fix Lint findings; verify the release APK has no extra permissions via `aapt dump permissions`
-- [ ] T054 [P] Run the policy gates from [quickstart.md](quickstart.md) §2 and confirm `test.yml` fails when a forbidden token is introduced (try it on a scratch commit, then revert)
+- [X] T053 [P] Run `./gradlew test lint :app:assembleRelease` locally (unsigned) and fix Lint findings; verify the release APK has no extra permissions via `aapt dump permissions`
+- [X] T054 [P] Run the policy gates from [quickstart.md](quickstart.md) §2 and confirm `test.yml` fails when a forbidden token is introduced (try it on a scratch commit, then revert)
 - [ ] T055 Walk through all 12 manual scenarios in [quickstart.md](quickstart.md) §3 on a real device; record results in `specs/001-check-and-install-updates/checklists/manual-run.md`
-- [ ] T056 [P] Verify on a device that Ghost BMS `versionName` equals its tag without `v` (open research item); if not, add the needed normalisation to the catalog test and `StatusResolver`
+- [X] T056 [P] Verify on a device that Ghost BMS `versionName` equals its tag without `v` (open research item); if not, add the needed normalisation to the catalog test and `StatusResolver`
 - [ ] T057 [P] Finalize `README.md` (what it does, privacy statement: only GitHub hosts, nothing sent, manual checks only, installation flow) and `CHANGELOG.md` entry for `0.1.0`; keep every user-facing string translated
 - [ ] T058 Prepare the first release: ensure the previous bullets are merged to `main` via pull request, secrets in place (T048), then tag `v0.1.0`; verify `updater.apk` and `updater.apk.sha256` are published and that an older updater build offers the update (quickstart §4)
 

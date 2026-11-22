@@ -87,11 +87,14 @@ class FakeInstaller(private val reader: FakeReader) : ApkInstaller {
     val results = mutableMapOf<String, InstallResult>()
     val gates = mutableMapOf<String, CompletableDeferred<Unit>>()
 
+    /** When false the result says "installed" but the device is left untouched (a spoofed callback). */
+    var updatesDevice = true
+
     override suspend fun install(file: File, app: ManagedApp): InstallResult {
         calls += app.id
         gates[app.id]?.await()
         val result = results[app.id] ?: InstallResult.Installed
-        if (result == InstallResult.Installed) {
+        if (result == InstallResult.Installed && updatesDevice) {
             val version = file.name.removePrefix("${app.id}-").removeSuffix(".apk")
             reader.installed[app.id] = InstalledApp(app.packageName, version, 100, setOf("sig"))
         }

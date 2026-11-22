@@ -6,8 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageInstaller
+import android.annotation.SuppressLint
 import android.os.Build
-import androidx.core.content.ContextCompat
 import io.github.kolod.updater.ApkInstaller
 import io.github.kolod.updater.InstallResult
 import io.github.kolod.updater.core.catalog.ManagedApp
@@ -60,6 +60,8 @@ class SessionInstaller(context: Context) : ApkInstaller {
             val action = "$ACTION_PREFIX.$sessionId"
             val receiver = object : BroadcastReceiver() {
                 override fun onReceive(context: Context, intent: Intent) {
+                    // Only our own session counts; the action alone could be sent by another app on old Android.
+                    if (intent.getIntExtra(PackageInstaller.EXTRA_SESSION_ID, -1) != sessionId) return
                     val status = intent.getIntExtra(PackageInstaller.EXTRA_STATUS, PackageInstaller.STATUS_FAILURE)
                     if (status == PackageInstaller.STATUS_PENDING_USER_ACTION) {
                         confirmationIntent(intent)?.let {
@@ -72,7 +74,7 @@ class SessionInstaller(context: Context) : ApkInstaller {
                     if (continuation.isActive) continuation.resume(mapStatus(status))
                 }
             }
-            ContextCompat.registerReceiver(context, receiver, IntentFilter(action), ContextCompat.RECEIVER_NOT_EXPORTED)
+            registerNotExported(receiver, IntentFilter(action))
             continuation.invokeOnCancellation {
                 runCatching { context.unregisterReceiver(receiver) }
                 abandonQuietly(installer, sessionId)
@@ -86,6 +88,19 @@ class SessionInstaller(context: Context) : ApkInstaller {
             )
             installer.openSession(sessionId).use { it.commit(pending.intentSender) }
         }
+
+    /**
+     * Registers without AndroidX's ContextCompat wrapper, which would add an extra permission to the
+     * manifest (the app must declare only INTERNET and REQUEST_INSTALL_PACKAGES).
+     */
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
+    private fun registerNotExported(receiver: BroadcastReceiver, filter: IntentFilter) {
+        if (Build.VERSION.SDK_INT >= 33) {
+            context.registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED)
+        } else {
+            context.registerReceiver(receiver, filter)
+        }
+    }
 
     @Suppress("DEPRECATION")
     private fun confirmationIntent(intent: Intent): Intent? =

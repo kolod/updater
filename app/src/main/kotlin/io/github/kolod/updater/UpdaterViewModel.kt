@@ -16,6 +16,7 @@ import io.github.kolod.updater.core.status.UpdateStatus
 import io.github.kolod.updater.core.status.resolveStatus
 import io.github.kolod.updater.core.verify.VerifyResult
 import io.github.kolod.updater.core.verify.checkDownloadedApk
+import io.github.kolod.updater.core.version.SemVer
 import io.github.kolod.updater.data.DownloadFiles
 import io.github.kolod.updater.data.GitHubReleaseSource
 import io.github.kolod.updater.data.HttpApkDownloader
@@ -387,8 +388,12 @@ class UpdaterViewModel(
             setAttempt(id, InstallAttempt.AwaitingConfirmation)
             when (val result = installer.install(done.file, app)) {
                 InstallResult.Installed -> {
-                    refreshAfterInstall(app, release)
-                    setAttempt(id, InstallAttempt.Installed)
+                    // Trust the device, not the callback: the installed version must really be the new one.
+                    if (refreshAfterInstall(app, release)) {
+                        setAttempt(id, InstallAttempt.Installed)
+                    } else {
+                        fail(id, FailureReason.InstallerRejected(1))
+                    }
                 }
                 InstallResult.Declined -> setAttempt(id, InstallAttempt.Idle)
                 is InstallResult.Failed -> fail(id, result.reason)
@@ -404,9 +409,12 @@ class UpdaterViewModel(
         }
     }
 
-    private suspend fun refreshAfterInstall(app: ManagedApp, release: Release) {
+    /** Re-reads the device and returns whether the installed version now matches [release]. */
+    private suspend fun refreshAfterInstall(app: ManagedApp, release: Release): Boolean {
         val installed = withContext(NonCancellable + io) { reader.read(app) }
         updateRow(app.id) { it.copy(installed = installed, status = resolveStatus(app, installed, release)) }
+        val version = installed?.versionName?.let { SemVer.parse(it) }
+        return version != null && version >= release.version
     }
 
     private fun fail(id: String, reason: FailureReason) {

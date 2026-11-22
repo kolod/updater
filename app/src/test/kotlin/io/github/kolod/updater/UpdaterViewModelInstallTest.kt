@@ -89,6 +89,17 @@ class UpdaterViewModelInstallTest {
     }
 
     @Test
+    fun anInstalledResultIsOnlyTrustedWhenTheDeviceShowsTheNewVersion() = runTest(dispatcher) {
+        val vm = checkedViewModel()
+        installer.updatesDevice = false
+        vm.install("whiskergrid")
+        advanceUntilIdle()
+        assertTrue(vm.row("whiskergrid").attempt is InstallAttempt.Failed)
+        assertTrue(vm.row("whiskergrid").status is UpdateStatus.UpdateAvailable)
+        assertNoLeftoverFiles()
+    }
+
+    @Test
     fun anAppThatIsNotInstalledCanBeInstalled() = runTest(dispatcher) {
         val vm = checkedViewModel(installed = emptySet())
         assertTrue(vm.row("circuitopedia").status is UpdateStatus.NotInstalled)

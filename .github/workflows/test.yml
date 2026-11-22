@@ -37,12 +37,22 @@ jobs:
             echo "::error::Forbidden API or permission found (see constitution Principles I-III)"
             exit 1
           fi
-          perms=$(grep -o 'uses-permission android:name="[^"]*"' app/src/main/AndroidManifest.xml | sed 's/.*name="//;s/"//' | sort | tr '\n' ' ')
-          expected="android.permission.INTERNET android.permission.REQUEST_INSTALL_PACKAGES "
-          if [ "$perms" != "$expected" ]; then
-            echo "::error::Unexpected manifest permissions: $perms"
-            exit 1
-          fi
 
       - name: Unit tests and Lint
-        run: ./gradlew test lint :app:assembleDebug --stacktrace
+        run: ./gradlew test lint :app:assembleDebug :app:assembleRelease --stacktrace
+
+      # The built APK, not the source manifest, is what users get: libraries can add permissions.
+      # AndroidX Core always adds its own signature-level DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION; it is
+      # private to this app and grants nothing (constitution 1.0.1), so it is the one allowed extra.
+      - name: Release APK permissions
+        run: |
+          aapt2=$(ls "$ANDROID_HOME"/build-tools/*/aapt2 | tail -1)
+          perms=$("$aapt2" dump permissions app/build/outputs/apk/release/app-release-unsigned.apk \
+            | grep '^uses-permission' | sed "s/.*name='//;s/'.*//" \
+            | grep -v '^io\.github\.kolod\.updater\.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION$' \
+            | sort | xargs)
+          expected="android.permission.INTERNET android.permission.REQUEST_INSTALL_PACKAGES"
+          if [ "$perms" != "$expected" ]; then
+            echo "::error::Unexpected permissions in the release APK: $perms"
+            exit 1
+          fi

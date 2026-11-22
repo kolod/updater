@@ -18,7 +18,7 @@ class PackageArchiveInspector(context: Context) : ApkInspector {
             null
         } ?: return null
         return ApkFacts(
-            packageName = info.packageName ?: return null,
+            packageName = info.packageName,
             versionName = info.versionName,
             versionCode = PackageInfoCompat.getLongVersionCode(info),
             signerSha256 = signerDigests(info),
