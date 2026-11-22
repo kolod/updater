@@ -64,6 +64,12 @@ class CatalogTest {
     }
 
     @Test
+    fun onlyHentaiReaderIsOptional() {
+        assertEquals(listOf("hentaireader"), Catalog.apps.filter { it.optional }.map { it.id })
+        assertTrue(Catalog.apps.filter { it.isSelf }.none { it.optional })
+    }
+
+    @Test
     fun everyRepositoryIsReachableUnderTheNetworkPolicy() {
         Catalog.apps.forEach {
             val url = "https://github.com/${it.repoOwner}/${it.repoName}/releases/download/v1.0.0/${it.apkAssetName}"

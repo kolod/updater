@@ -65,6 +65,11 @@ class UpdaterViewModelCheckTest {
         val vm = viewModel()
         advanceUntilIdle()
         assertEquals(Catalog.apps.map { it.id }, vm.state.value.apps.map { it.app.id })
+        // Hentai Reader is optional and not installed, so it has no visible row.
+        assertEquals(
+            Catalog.apps.map { it.id }.filter { it != "hentaireader" },
+            vm.state.value.visibleApps.map { it.app.id },
+        )
         assertTrue(vm.state.value.apps.all { it.status == null })
         assertFalse(vm.state.value.isChecking)
         assertNull(vm.state.value.lastCheckedAt)
@@ -82,8 +87,8 @@ class UpdaterViewModelCheckTest {
         assertTrue(vm.row("whiskergrid").status is UpdateStatus.UpdateAvailable)
         assertTrue(vm.row("circuitopedia").status is UpdateStatus.UpToDate)
         assertTrue(vm.row("ghostbms").status is UpdateStatus.NotInstalled)
-        assertEquals(5, vm.state.value.apps.count { it.status != null })
-        assertTrue(vm.state.value.apps.all { it.freshness == Freshness.Fresh })
+        assertEquals(4, vm.state.value.visibleApps.count { it.status != null })
+        assertTrue(vm.state.value.visibleApps.all { it.freshness == Freshness.Fresh })
         assertEquals("2.0.0", vm.row("whiskergrid").latestKnown)
         assertEquals(1, vm.state.value.updatesAvailable)
         assertEquals(now, vm.state.value.lastCheckedAt)
@@ -98,7 +103,7 @@ class UpdaterViewModelCheckTest {
         val vm = viewModel()
         vm.check()
         runCurrent()
-        assertEquals("all five requests are in flight before any finishes", 5, source.calls.size)
+        assertEquals("all four requests are in flight before any finishes", 4, source.calls.size)
         assertTrue(vm.state.value.isChecking)
         gate.complete(Unit)
         advanceUntilIdle()
@@ -113,7 +118,7 @@ class UpdaterViewModelCheckTest {
         vm.check()
         advanceUntilIdle()
         assertEquals(UpdateStatus.Failed(FailureReason.ServerError(500)), vm.row("whiskergrid").status)
-        listOf("ghostbms", "hentaireader", "circuitopedia", "updater").forEach {
+        listOf("ghostbms", "circuitopedia", "updater").forEach {
             assertTrue(it, vm.row(it).status is UpdateStatus.NotInstalled)
             assertEquals(Freshness.Fresh, vm.row(it).freshness)
         }
@@ -127,9 +132,9 @@ class UpdaterViewModelCheckTest {
         val vm = viewModel()
         vm.check()
         advanceUntilIdle()
-        // Catalog order: ghostbms, whiskergrid (limited), hentaireader, circuitopedia, updater.
+        // Catalog order: ghostbms, whiskergrid (limited), circuitopedia, updater (hentaireader is not asked).
         assertEquals(listOf("ghostbms", "whiskergrid"), source.calls)
-        listOf("whiskergrid", "hentaireader", "circuitopedia", "updater").forEach {
+        listOf("whiskergrid", "circuitopedia", "updater").forEach {
             assertEquals(it, UpdateStatus.Failed(limited), vm.row(it).status)
         }
         assertTrue(vm.row("ghostbms").status is UpdateStatus.NotInstalled)
@@ -144,7 +149,7 @@ class UpdaterViewModelCheckTest {
         runCurrent()
         vm.check()
         runCurrent()
-        assertEquals(5, source.calls.size)
+        assertEquals(4, source.calls.size)
     }
 
     @Test
@@ -217,5 +222,47 @@ class UpdaterViewModelCheckTest {
         assertEquals(Freshness.Stale, row.freshness)
         assertEquals("1.0.0", row.installed?.versionName)
         assertNull(row.status)
+    }
+
+    @Test
+    fun anOptionalAppThatIsNotInstalledHasNoRowAndCausesNoRequest() = runTest(dispatcher) {
+        allSucceedWith("2.0.0")
+        val vm = viewModel()
+        vm.check()
+        advanceUntilIdle()
+        assertFalse("hentaireader" in source.calls)
+        assertFalse(vm.state.value.visibleApps.any { it.app.id == "hentaireader" })
+        assertNull(vm.row("hentaireader").status)
+    }
+
+    @Test
+    fun anInstalledOptionalAppIsListedCheckedAndCounted() = runTest(dispatcher) {
+        allSucceedWith("2.0.0")
+        reader.installed["hentaireader"] = installedOf(Catalog.byId("hentaireader"), "1.0.0")
+        val vm = viewModel()
+        vm.check()
+        advanceUntilIdle()
+        assertTrue("hentaireader" in source.calls)
+        assertTrue(vm.state.value.visibleApps.any { it.app.id == "hentaireader" })
+        assertTrue(vm.row("hentaireader").status is UpdateStatus.UpdateAvailable)
+        assertEquals(1, vm.state.value.updatesAvailable)
+    }
+
+    @Test
+    fun anOptionalAppDisappearsAtTheNextCheckAfterItIsUninstalled() = runTest(dispatcher) {
+        allSucceedWith("2.0.0")
+        reader.installed["hentaireader"] = installedOf(Catalog.byId("hentaireader"), "1.0.0")
+        val vm = viewModel()
+        vm.check()
+        advanceUntilIdle()
+        assertTrue(vm.state.value.visibleApps.any { it.app.id == "hentaireader" })
+
+        reader.installed["hentaireader"] = null
+        source.calls.clear()
+        vm.check()
+        advanceUntilIdle()
+        assertFalse(vm.state.value.visibleApps.any { it.app.id == "hentaireader" })
+        assertFalse("hentaireader" in source.calls)
+        assertEquals(0, vm.state.value.updatesAvailable)
     }
 }

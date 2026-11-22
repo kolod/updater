@@ -42,7 +42,7 @@ fun UpdaterScreen(
             item {
                 Header(state, onCheck, onCancelCheck, onUpdateAll)
             }
-            items(state.apps, key = { it.app.id }) { row ->
+            items(state.visibleApps, key = { it.app.id }) { row ->
                 AppRow(
                     row = row,
                     onInstall = { onInstall(row.app.id) },

@@ -311,4 +311,14 @@ class UpdaterViewModelInstallTest {
         assertTrue(installer.calls.isEmpty())
         assertNoLeftoverFiles()
     }
+
+    @Test
+    fun anOptionalAppThatIsNotInstalledIsNeverInstalledNorPartOfUpdateAll() = runTest(dispatcher) {
+        val vm = checkedViewModel(installed = Catalog.apps.map { it.id }.toSet() - "hentaireader")
+        vm.install("hentaireader")
+        vm.updateAll()
+        advanceUntilIdle()
+        assertFalse("hentaireader" in downloader.calls)
+        assertEquals(listOf("ghostbms", "whiskergrid", "circuitopedia", "updater"), downloader.calls)
+    }
 }

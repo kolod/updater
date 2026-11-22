@@ -31,6 +31,7 @@ object Catalog {
             tagPrefix = "android-v",
             apkAssetName = "hentai-reader.apk",
             checksumAssetName = "hentai-reader.apk.sha256",
+            optional = true,
         ),
         ManagedApp(
             id = "circuitopedia",

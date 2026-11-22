@@ -79,8 +79,14 @@ data class UpdaterUiState(
     /** The screen should send the user to the "install unknown apps" setting. */
     val permissionRequested: Boolean = false,
 ) {
-    val updatesAvailable: Int get() = apps.count { it.status is UpdateStatus.UpdateAvailable }
-    val anyBusy: Boolean get() = apps.any { it.attempt.isBusy }
+    /**
+     * The rows to show. [apps] holds every catalog entry; an optional app (Hentai Reader) is
+     * visible only while it is installed (spec FR-021).
+     */
+    val visibleApps: List<AppState> get() = apps.filter { !it.app.optional || it.installed != null }
+
+    val updatesAvailable: Int get() = visibleApps.count { it.status is UpdateStatus.UpdateAvailable }
+    val anyBusy: Boolean get() = visibleApps.any { it.attempt.isBusy }
 }
 
 /**
@@ -191,6 +197,11 @@ class UpdaterViewModel(
 
     private suspend fun checkOne(app: ManagedApp, rateLimit: AtomicReference<FailureReason.RateLimited?>) {
         val installed = withContext(io) { reader.read(app) }
+        if (app.optional && installed == null) {
+            // Optional and not installed: no row and, above all, no request about it (spec FR-021).
+            updateRow(app.id) { unknownRow(app, null).copy(attempt = it.attempt) }
+            return
+        }
         val limited = rateLimit.get()
         val result = if (limited != null) FetchResult.Failure(limited) else source.fetch(app)
         if (result is FetchResult.Failure && result.reason is FailureReason.RateLimited) {
@@ -253,7 +264,7 @@ class UpdaterViewModel(
 
     /** Updates every outdated installed app, one after another, the updater itself last. */
     fun updateAll() {
-        val ids = _state.value.apps
+        val ids = _state.value.visibleApps
             .filter { it.status is UpdateStatus.UpdateAvailable }
             .sortedBy { it.app.isSelf }
             .map { it.app.id }
@@ -309,7 +320,7 @@ class UpdaterViewModel(
     private fun enqueue(ids: List<String>) {
         var added = false
         for (id in ids) {
-            val row = _state.value.apps.firstOrNull { it.app.id == id } ?: continue
+            val row = _state.value.visibleApps.firstOrNull { it.app.id == id } ?: continue
             if (row.attempt.isBusy) continue
             if (row.status !is UpdateStatus.UpdateAvailable && row.status !is UpdateStatus.NotInstalled) continue
             queue.addLast(id)

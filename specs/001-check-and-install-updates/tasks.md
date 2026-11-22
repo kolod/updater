@@ -177,6 +177,17 @@ forbids handing any APK to the installer unverified, so US2 depends on US3's pur
 
 ---
 
+---
+
+## Phase 9: Follow-up from clarification 2026-11-22 (Hentai Reader is optional, FR-021)
+
+- [X] T059 [P] Add the `optional` flag to `ManagedApp.kt` and mark Hentai Reader in `Catalog.kt`; extend `CatalogTest.kt` (only Hentai Reader is optional)
+- [X] T060 Skip the network request and hide the row of an optional app that is not installed: `UpdaterViewModel.kt` (`visibleApps`, `checkOne`, `updateAll`, `install`) and `ui/UpdaterScreen.kt`
+- [X] T061 [P] Tests in `UpdaterViewModelCheckTest.kt` and `UpdaterViewModelInstallTest.kt`: no row and no request while absent, listed and counted while installed, disappears after uninstall, never installed or part of "Update all"
+- [X] T062 [P] Update `contracts/catalog.md`, `data-model.md`, `README.md` and `CHANGELOG.md`
+
+---
+
 ## Dependencies & Execution Order
 
 - **Setup (Phase 1)** → **Foundational (Phase 2)** → user stories.

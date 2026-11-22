@@ -15,6 +15,7 @@ sealed interfaces. No Android types. Names are indicative; tasks define exact si
 | `apkAssetName` | `String` | Exact asset file name, e.g. `whisker-grid.apk` |
 | `checksumAssetName` | `String?` | Only hentai-reader (`hentai-reader.apk.sha256`) |
 | `isSelf` | `Boolean` | True for the updater; ordered last in "Update all" |
+| `optional` | `Boolean` | Listed, checked and updated only while installed (Hentai Reader); never offered for installation, no network request while absent |
 
 Validation: package name matches `[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+`; `tagPrefix` non-empty; catalog has
 unique `id` and `packageName`; exactly one `isSelf`. Entries: see [contracts/catalog.md](contracts/catalog.md).

@@ -8,7 +8,8 @@ Free, ad-free, open-source Android app that checks GitHub Releases for new versi
 
 ## What it does
 
-- Lists the five apps with their installed and latest versions.
+- Lists the managed apps with their installed and latest versions. Hentai Reader is optional: it appears,
+  and is checked, only while it is installed on the device.
 - Checks for updates **only** when you open the app or press **Check for updates**. There is no
   schedule, no background work and no notification.
 - Downloads an update, verifies it, and hands it to the system installer. You always confirm in the

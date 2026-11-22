@@ -17,6 +17,11 @@ data class ManagedApp(
     val checksumAssetName: String? = null,
     /** True for the updater itself, which is installed last in "update all". */
     val isSelf: Boolean = false,
+    /**
+     * Optional apps are listed, checked and updated only while installed on the device. While they
+     * are not installed there is no row and no network request about them (spec FR-021).
+     */
+    val optional: Boolean = false,
 ) {
     val releasesApiUrl: String
         get() = "https://api.github.com/repos/$repoOwner/$repoName/releases?per_page=30"
