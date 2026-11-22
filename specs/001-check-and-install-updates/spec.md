@@ -8,11 +8,17 @@
 
 **Input**: User description: "перевірка оновлень і встановлення" — an app that checks for new versions of the owner's Android apps (Ghost BMS, Whisker Grid, Hentai Reader, Circuitopedia) and installs them; checks happen when the app is launched manually and/or via a button in the app, never on a schedule. The updater also updates itself.
 
+## Clarifications
+
+### Session 2026-11-22
+
+- Q: Should Hentai Reader be checked on GitHub while it is not installed? → A: No. Hentai Reader is an optional app: it is listed, checked and updated only while it is installed on the device. While it is not installed it has no row and no network request is made for it.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - See which apps have updates (Priority: P1)
 
-The user opens the updater. It immediately checks all managed apps and shows one row per app: its name, the installed version (or "not installed"), the latest published version, and a status — up to date, update available, not installed, or check failed. The user can press a "Check for updates" button at any time to repeat the check.
+The user opens the updater. It immediately checks all managed apps that apply (optional apps count only while installed) and shows one row per app: its name, the installed version (or "not installed"), the latest published version, and a status — up to date, update available, not installed, or check failed. The user can press a "Check for updates" button at any time to repeat the check.
 
 **Why this priority**: Knowing what is outdated is the core value and is useful on its own, even before installation works.
 
@@ -22,7 +28,8 @@ The user opens the updater. It immediately checks all managed apps and shows one
 
 1. **Given** an installed app is older than its latest release, **When** the user opens the updater, **Then** the app's row shows "update available" with both versions.
 2. **Given** an installed app has the latest version, **When** a check completes, **Then** its row shows "up to date".
-3. **Given** a managed app is not installed, **When** a check completes, **Then** its row shows "not installed" with the latest available version.
+3. **Given** a managed app that is not optional is not installed, **When** a check completes, **Then** its row shows "not installed" with the latest available version.
+7. **Given** Hentai Reader is not installed, **When** a check runs, **Then** it has no row, is not counted anywhere, and no request about it is made. **Given** it is installed, **Then** it appears and is checked like any other app.
 4. **Given** the device is offline, **When** a check runs, **Then** every row shows "check failed" with a clear reason, and the previous known versions remain visible, marked as not fresh.
 5. **Given** the updater is not open, **When** time passes, **Then** no check, download or notification is ever triggered by the updater.
 6. **Given** a check is in progress, **When** the user cancels it, **Then** it stops promptly and rows keep their previous state.
@@ -106,6 +113,7 @@ When a check or installation fails, the user sees which app failed and why (no c
 - The app is closed or the device restarts in the middle of a download: the partial file is discarded; the next launch shows a clean state.
 - Not enough free storage for the download: the user is told before or when the download fails, and no partial file remains.
 - The user switches network type mid-download: the download either resumes safely or fails cleanly with a retry option; it never installs a partial file.
+- Hentai Reader is installed or uninstalled by other means while the updater is open: the list changes at the next check or launch, not before.
 - A managed app is installed but not visible to the updater (system restriction): it is treated as "not installed" only if the system confirms it is absent; otherwise the row shows an explicit problem rather than offering a misleading install.
 - The updater is opened repeatedly in quick succession: a check already in progress is not duplicated.
 - The latest release of an app changes between the check and the download: the version that was verified is the one installed, or the check is repeated; never an unverified mix.
@@ -114,9 +122,9 @@ When a check or installation fails, the user sees which app failed and why (no c
 
 ### Functional Requirements
 
-- **FR-001**: The system MUST manage a fixed catalog of apps: Ghost BMS (unofficial), Whisker Grid, Hentai Reader, Circuitopedia and the updater itself, each with its source repository, package identity, release naming rule and installable file name.
+- **FR-001**: The system MUST manage a fixed catalog of apps: Ghost BMS (unofficial), Whisker Grid, Hentai Reader, Circuitopedia and the updater itself, each with its source repository, package identity, release naming rule and installable file name. Hentai Reader is marked optional (see FR-021).
 - **FR-002**: The system MUST run an update check automatically when the user manually opens the app, and when the user presses a "Check for updates" button; it MUST NOT check, download or notify at any other time, including on a schedule, at device start or in the background.
-- **FR-003**: For each catalog app, the system MUST show the installed version (or "not installed"), the latest available version, and one of the statuses: up to date, update available, not installed, check failed, no release available.
+- **FR-003**: For each listed catalog app, the system MUST show the installed version (or "not installed"), the latest available version, and one of the statuses: up to date, update available, not installed, check failed, no release available. The status "not installed" applies only to apps that are not optional.
 - **FR-004**: The system MUST determine the latest version only from the owner's published releases, ignoring drafts, pre-releases and releases that do not match the app's release naming rule.
 - **FR-005**: The system MUST compare versions by semantic-versioning rules, including pre-release ordering, and MUST offer an install action only when the latest version is strictly newer than the installed one, or the app is not installed.
 - **FR-006**: The system MUST show when the last check completed, and MUST indicate that displayed data from a previous check is not fresh when a new check fails.
@@ -134,10 +142,11 @@ When a check or installation fails, the user sees which app failed and why (no c
 - **FR-018**: The system MUST communicate only with the release source of the catalog apps, MUST send no account, device or installed-app information, and MUST include no ads, analytics or tracking.
 - **FR-019**: All user-facing text MUST be available in English, German, French, Spanish, Japanese and Ukrainian, with English as fallback; dates, times, numbers and file sizes MUST follow the user's locale.
 - **FR-020**: The catalog MUST be fixed inside the app; it MUST NOT be changed by any remote source or by user input in this version.
+- **FR-021**: An optional catalog app (Hentai Reader) MUST be listed, checked and offered for update only while it is installed on the device. While it is not installed, the system MUST NOT list it, count it (including in "N updates available"), offer to install it (also not through "Update all"), or make any network request about it. When it is installed or uninstalled by other means, the list MUST reflect that at the next check or launch.
 
 ### Key Entities
 
-- **Managed App**: One entry of the catalog — display name, source repository, package identity, release naming rule, installable file name, optional checksum file name. Fixed per app version.
+- **Managed App**: One entry of the catalog — display name, source repository, package identity, release naming rule, installable file name, optional checksum file name, and whether the app is optional (listed only while installed). Fixed per app version.
 - **Installed Version**: The version of a managed app currently installed on the device, or absence of it. Read from the device on every check.
 - **Release**: A published version of a managed app — version, whether it is a draft/pre-release, the installable file and its size, and its checksum if published.
 - **Update Status**: The outcome of a check for one managed app (up to date, update available, not installed, check failed with reason, no release available), plus the time it was determined.
@@ -147,7 +156,7 @@ When a check or installation fails, the user sees which app failed and why (no c
 
 ### Measurable Outcomes
 
-- **SC-001**: After opening the app on a working connection, the user sees the status of all five catalog apps in under 10 seconds.
+- **SC-001**: After opening the app on a working connection, the user sees the status of every listed catalog app (five, or four while Hentai Reader is not installed) in under 10 seconds.
 - **SC-002**: A user can update one outdated app from opening the updater to the app running its new version in no more than 4 taps (open → update → system confirm → done), excluding the one-time permission grant.
 - **SC-003**: In 100% of tested cases with a wrong checksum, wrong package identity, or non-newer version, the system installer is never invoked and the downloaded file is deleted.
 - **SC-004**: Over a 24-hour period with the updater never opened, it performs zero network requests and shows zero notifications.
@@ -155,6 +164,7 @@ When a check or installation fails, the user sees which app failed and why (no c
 - **SC-006**: After any completed, declined, failed or cancelled installation, zero downloaded files remain on the device.
 - **SC-007**: 100% of user-visible texts introduced by this feature exist in all six supported languages.
 - **SC-008**: Version comparison gives the correct result for 100% of a test set that includes pre-release, equal, lower, higher and other-platform release cases.
+- **SC-009**: While Hentai Reader is not installed, 100% of checks show no row for it and send zero requests about its repository.
 
 ## Assumptions
 
