@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Updater</string>
+
+    <string name="check_updates">Buscar actualizaciones</string>
+    <string name="checking">Comprobando…</string>
+    <string name="cancel">Cancelar</string>
+    <string name="last_checked">Última comprobación: %1$s</string>
+    <string name="never_checked">Aún sin comprobar</string>
+    <string name="stale_note">Datos anteriores, sin actualizar</string>
+
+    <string name="version_installed">Instalada: %1$s</string>
+    <string name="version_latest">Última: %1$s</string>
+    <string name="version_unknown">desconocida</string>
+
+    <string name="status_up_to_date">Actualizada</string>
+    <string name="status_update_available">Actualización disponible</string>
+    <string name="status_not_installed">No instalada</string>
+    <string name="status_no_release">Sin versión disponible</string>
+    <string name="status_no_file">No hay archivo instalable en la última versión</string>
+    <string name="status_check_failed">Error en la comprobación</string>
+
+    <plurals name="updates_available">
+        <item quantity="one">%d actualización disponible</item>
+        <item quantity="many">%d de actualizaciones disponibles</item>
+        <item quantity="other">%d actualizaciones disponibles</item>
+    </plurals>
+
+    <string name="retry">Reintentar</string>
+    <string name="install">Instalar</string>
+    <string name="update">Actualizar</string>
+    <string name="update_all">Actualizar todo</string>
+    <string name="state_queued">En cola</string>
+    <string name="download_progress">Descargando: %1$s de %2$s</string>
+    <string name="state_verifying">Verificando…</string>
+    <string name="state_awaiting_confirmation">Esperando tu confirmación</string>
+    <string name="state_installed">Instalada</string>
+
+    <string name="failure_offline">Sin conexión con GitHub</string>
+    <string name="failure_rate_limited">Se alcanzó el límite de solicitudes de GitHub</string>
+    <string name="failure_rate_limited_until">Se alcanzó el límite de solicitudes de GitHub. Inténtalo de nuevo después de %1$s</string>
+    <string name="failure_server_error">GitHub devolvió un error (%1$d)</string>
+    <string name="failure_bad_response">Respuesta inesperada de GitHub</string>
+    <string name="failure_storage_full">No hay suficiente espacio libre</string>
+    <string name="failure_checksum">El archivo descargado está dañado o ha sido manipulado</string>
+    <string name="failure_wrong_package">El archivo descargado pertenece a otra aplicación</string>
+    <string name="failure_version_mismatch">La versión del archivo descargado no coincide con la publicación</string>
+    <string name="failure_version_not_newer">La versión descargada no es más reciente que la instalada</string>
+    <string name="failure_signature">La actualización está firmada con una clave distinta a la de la aplicación instalada. No se instaló y no se eliminó nada.</string>
+    <string name="failure_installer_rejected">El instalador del sistema rechazó la actualización (código %1$d)</string>
+    <string name="failure_not_allowed">Aún no se permite instalar aplicaciones desde esta fuente</string>
+</resources>

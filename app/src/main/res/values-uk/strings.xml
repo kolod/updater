@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Updater</string>
+
+    <string name="check_updates">Перевірити оновлення</string>
+    <string name="checking">Перевірка…</string>
+    <string name="cancel">Скасувати</string>
+    <string name="last_checked">Остання перевірка: %1$s</string>
+    <string name="never_checked">Ще не перевірялось</string>
+    <string name="stale_note">Попередні дані, не оновлено</string>
+
+    <string name="version_installed">Встановлено: %1$s</string>
+    <string name="version_latest">Остання: %1$s</string>
+    <string name="version_unknown">невідомо</string>
+
+    <string name="status_up_to_date">Актуальна версія</string>
+    <string name="status_update_available">Доступне оновлення</string>
+    <string name="status_not_installed">Не встановлено</string>
+    <string name="status_no_release">Релізів немає</string>
+    <string name="status_no_file">В останньому релізі немає файлу для встановлення</string>
+    <string name="status_check_failed">Не вдалося перевірити</string>
+
+    <plurals name="updates_available">
+        <item quantity="one">Доступне %d оновлення</item>
+        <item quantity="few">Доступно %d оновлення</item>
+        <item quantity="many">Доступно %d оновлень</item>
+        <item quantity="other">Доступно %d оновлення</item>
+    </plurals>
+
+    <string name="retry">Повторити</string>
+    <string name="install">Встановити</string>
+    <string name="update">Оновити</string>
+    <string name="update_all">Оновити все</string>
+    <string name="state_queued">У черзі</string>
+    <string name="download_progress">Завантаження: %1$s з %2$s</string>
+    <string name="state_verifying">Перевірка файлу…</string>
+    <string name="state_awaiting_confirmation">Очікування вашого підтвердження</string>
+    <string name="state_installed">Встановлено</string>
+
+    <string name="failure_offline">Немає зʼєднання з GitHub</string>
+    <string name="failure_rate_limited">Досягнуто ліміт запитів GitHub</string>
+    <string name="failure_rate_limited_until">Досягнуто ліміт запитів GitHub. Спробуйте після %1$s</string>
+    <string name="failure_server_error">GitHub повернув помилку (%1$d)</string>
+    <string name="failure_bad_response">Неочікувана відповідь від GitHub</string>
+    <string name="failure_storage_full">Недостатньо вільного місця</string>
+    <string name="failure_checksum">Завантажений файл пошкоджений або підмінений</string>
+    <string name="failure_wrong_package">Завантажений файл належить іншому застосунку</string>
+    <string name="failure_version_mismatch">Версія завантаженого файлу не збігається з релізом</string>
+    <string name="failure_version_not_newer">Завантажена версія не новіша за встановлену</string>
+    <string name="failure_signature">Оновлення підписане іншим ключем, ніж встановлений застосунок. Його не встановлено, і нічого не видалено.</string>
+    <string name="failure_installer_rejected">Системний встановлювач відхилив оновлення (код %1$d)</string>
+    <string name="failure_not_allowed">Встановлення застосунків із цього джерела ще не дозволено</string>
+</resources>

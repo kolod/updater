@@ -12,3 +12,4 @@ keystore.properties
 .remember/
 .claude/settings.local.json
 .vscode/
+app/release.keystore.jks

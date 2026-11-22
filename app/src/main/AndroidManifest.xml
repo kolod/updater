@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Permissions (constitution, Technical Constraints): INTERNET to read GitHub Releases and download
+     APKs; REQUEST_INSTALL_PACKAGES to hand verified APKs to the system installer. Nothing else.
+     Package visibility is limited to the managed apps via the queries element (no broad package query).
+     No services, boot receivers or schedulers exist (Principle III). Portrait only. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
+    <queries>
+        <package android:name="io.github.kolod.ghostbms" />
+        <package android:name="io.github.kolod.whiskergrid" />
+        <package android:name="io.github.kolod.hentaireader" />
+        <package android:name="io.github.kolod.circuitopedia" />
+    </queries>
+
+    <application
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Updater">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

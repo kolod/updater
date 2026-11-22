@@ -1,0 +1,5 @@
+HTTP/2 403
+x-ratelimit-limit: 60
+x-ratelimit-remaining: 0
+x-ratelimit-reset: 1795352754
+x-ratelimit-resource: core

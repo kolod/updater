@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Updater</string>
+
+    <string name="check_updates">アップデートを確認</string>
+    <string name="checking">確認中…</string>
+    <string name="cancel">キャンセル</string>
+    <string name="last_checked">最終確認: %1$s</string>
+    <string name="never_checked">未確認</string>
+    <string name="stale_note">以前のデータ（未更新）</string>
+
+    <string name="version_installed">インストール済み: %1$s</string>
+    <string name="version_latest">最新: %1$s</string>
+    <string name="version_unknown">不明</string>
+
+    <string name="status_up_to_date">最新の状態</string>
+    <string name="status_update_available">アップデートあり</string>
+    <string name="status_not_installed">未インストール</string>
+    <string name="status_no_release">利用可能なリリースなし</string>
+    <string name="status_no_file">最新リリースにインストール可能なファイルがありません</string>
+    <string name="status_check_failed">確認に失敗しました</string>
+
+    <plurals name="updates_available">
+        <item quantity="other">%d 件のアップデートがあります</item>
+    </plurals>
+
+    <string name="retry">再試行</string>
+    <string name="install">インストール</string>
+    <string name="update">アップデート</string>
+    <string name="update_all">すべてアップデート</string>
+    <string name="state_queued">待機中</string>
+    <string name="download_progress">ダウンロード中: %1$s / %2$s</string>
+    <string name="state_verifying">検証中…</string>
+    <string name="state_awaiting_confirmation">確認をお待ちしています</string>
+    <string name="state_installed">インストールしました</string>
+
+    <string name="failure_offline">GitHub に接続できません</string>
+    <string name="failure_rate_limited">GitHub のリクエスト上限に達しました</string>
+    <string name="failure_rate_limited_until">GitHub のリクエスト上限に達しました。%1$s 以降にもう一度お試しください</string>
+    <string name="failure_server_error">GitHub がエラーを返しました (%1$d)</string>
+    <string name="failure_bad_response">GitHub から予期しない応答がありました</string>
+    <string name="failure_storage_full">空き容量が不足しています</string>
+    <string name="failure_checksum">ダウンロードしたファイルが破損または改ざんされています</string>
+    <string name="failure_wrong_package">ダウンロードしたファイルは別のアプリのものです</string>
+    <string name="failure_version_mismatch">ダウンロードしたファイルのバージョンがリリースと一致しません</string>
+    <string name="failure_version_not_newer">ダウンロードしたバージョンはインストール済みより新しくありません</string>
+    <string name="failure_signature">このアップデートはインストール済みのアプリと異なる鍵で署名されています。インストールは行われず、何も削除されていません。</string>
+    <string name="failure_installer_rejected">システムのインストーラーがアップデートを拒否しました (コード %1$d)</string>
+    <string name="failure_not_allowed">この提供元からのアプリのインストールはまだ許可されていません</string>
+</resources>

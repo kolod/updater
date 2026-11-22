@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Down arrow onto a tray: download and install. Kept inside the 66dp safe zone. -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M49,30h10v20h9l-14,15l-14,-15h9z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M36,70h36v6h-36z" />
+</vector>
