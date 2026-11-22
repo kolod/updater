@@ -1,4 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Updater</string>
+
+    <string name="check_updates">Nach Updates suchen</string>
+    <string name="checking">Suche läuft…</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="last_checked">Zuletzt geprüft: %1$s</string>
+    <string name="never_checked">Noch nicht geprüft</string>
+    <string name="stale_note">Frühere Daten, nicht aktualisiert</string>
+
+    <string name="version_installed">Installiert: %1$s</string>
+    <string name="version_latest">Neueste: %1$s</string>
+    <string name="version_unknown">unbekannt</string>
+
+    <string name="status_up_to_date">Aktuell</string>
+    <string name="status_update_available">Update verfügbar</string>
+    <string name="status_not_installed">Nicht installiert</string>
+    <string name="status_no_release">Kein Release verfügbar</string>
+    <string name="status_no_file">Keine installierbare Datei im neuesten Release</string>
+    <string name="status_check_failed">Prüfung fehlgeschlagen</string>
+
+    <plurals name="updates_available">
+        <item quantity="one">%d Update verfügbar</item>
+        <item quantity="other">%d Updates verfügbar</item>
+    </plurals>
+
+    <string name="failure_offline">Keine Verbindung zu GitHub</string>
+    <string name="failure_rate_limited">GitHub-Anfragelimit erreicht</string>
+    <string name="failure_rate_limited_until">GitHub-Anfragelimit erreicht. Versuche es nach %1$s erneut</string>
+    <string name="failure_server_error">GitHub hat einen Fehler gemeldet (%1$d)</string>
+    <string name="failure_bad_response">Unerwartete Antwort von GitHub</string>
+    <string name="failure_storage_full">Nicht genug freier Speicher</string>
+    <string name="failure_checksum">Die heruntergeladene Datei ist beschädigt oder manipuliert</string>
+    <string name="failure_wrong_package">Die heruntergeladene Datei gehört zu einer anderen App</string>
+    <string name="failure_version_mismatch">Die Version der heruntergeladenen Datei passt nicht zum Release</string>
+    <string name="failure_version_not_newer">Die heruntergeladene Version ist nicht neuer als die installierte</string>
+    <string name="failure_signature">Das Update ist mit einem anderen Schlüssel signiert als die installierte App. Es wurde nicht installiert und nichts wurde entfernt.</string>
+    <string name="failure_installer_rejected">Der System-Installer hat das Update abgelehnt (Code %1$d)</string>
+    <string name="failure_not_allowed">Das Installieren von Apps aus dieser Quelle ist noch nicht erlaubt</string>
 </resources>

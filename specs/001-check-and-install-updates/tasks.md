@@ -72,19 +72,19 @@ forbids handing any APK to the installer unverified, so US2 depends on US3's pur
 
 ### Tests for User Story 1 (write first, must fail)
 
-- [ ] T021 [P] [US1] Write `app/src/test/kotlin/…/updater/UpdaterViewModelCheckTest.kt` with fakes for `ReleaseSource`/`InstalledAppReader`: all five rows resolved; checks run in parallel; one failing app does not change others; rate-limit stops remaining requests and marks them with the same reason; second `check()` while checking is ignored; cancel stops the run and keeps previous rows; failed check keeps previous versions flagged `Stale`; `lastCheckedAt` updates only on completion
-- [ ] T022 [P] [US1] Write `app/src/test/kotlin/…/updater/data/LastCheckStoreTest.kt`: round-trip, atomic write, corrupt file ignored, unknown `version` ignored, no data beyond the catalog ids
+- [X] T021 [P] [US1] Write `app/src/test/kotlin/…/updater/UpdaterViewModelCheckTest.kt` with fakes for `ReleaseSource`/`InstalledAppReader`: all five rows resolved; checks run in parallel; one failing app does not change others; rate-limit stops remaining requests and marks them with the same reason; second `check()` while checking is ignored; cancel stops the run and keeps previous rows; failed check keeps previous versions flagged `Stale`; `lastCheckedAt` updates only on completion
+- [X] T022 [P] [US1] Write `app/src/test/kotlin/…/updater/data/LastCheckStoreTest.kt`: round-trip, atomic write, corrupt file ignored, unknown `version` ignored, no data beyond the catalog ids
 
 ### Implementation for User Story 1
 
-- [ ] T023 [P] [US1] Create the ports in `app/src/main/kotlin/…/updater/Ports.kt` exactly as in [contracts/core-api.md](contracts/core-api.md) (`ReleaseSource`, `InstalledAppReader`, `ApkDownloader`, `ApkInspector`, `ApkInstaller` and their result types)
-- [ ] T024 [P] [US1] Implement `app/src/main/kotlin/…/updater/data/GitHubReleaseSource.kt`: `HttpURLConnection` GET per [contracts/github-releases.md](contracts/github-releases.md), headers/timeouts/redirects per [contracts/network-policy.md](contracts/network-policy.md) via `NetworkPolicy`, `runInterruptible` on `Dispatchers.IO`, bounded retry via `ResponseMapper`, result through `parseReleases`/`selectRelease`
-- [ ] T025 [P] [US1] Implement `app/src/main/kotlin/…/updater/device/InstalledAppReader.kt`: `PackageManager.getPackageInfo` → `InstalledApp` (versionName, longVersionCode, signer SHA-256 set via `GET_SIGNING_CERTIFICATES`); `NameNotFoundException` → not installed
-- [ ] T026 [P] [US1] Implement `app/src/main/kotlin/…/updater/data/LastCheckStore.kt` (atomic JSON file in `filesDir`, constructor takes a `File` for testability)
-- [ ] T027 [US1] Implement the check part of `app/src/main/kotlin/…/updater/UpdaterViewModel.kt` (`UpdaterUiState`, `check()`, `cancel`, parallel `async` per app, snapshot restore as `Stale`) until T021 and T022 pass
-- [ ] T028 [US1] Implement `app/src/main/kotlin/…/updater/MainActivity.kt`: start a check only when `savedInstanceState == null`; cancel running checks/downloads in `onStop` unless `isChangingConfigurations`; no other triggers
-- [ ] T029 [P] [US1] Implement UI: `app/src/main/kotlin/…/updater/ui/UpdaterScreen.kt` (top bar with check button, last-checked line, list), `AppRow.kt` (name, installed → latest, status, stale marker), `Messages.kt` (`FailureReason`/status → string resource)
-- [ ] T030 [US1] Add all US1 strings (statuses, check button, last checked, stale marker, offline/other failure messages, plural "N updates available") to `values/` and translate into `values-de`, `-fr`, `-es`, `-ja`, `-uk` in `app/src/main/res/`; `LocaleCoverageTest` stays green
+- [X] T023 [P] [US1] Create the ports in `app/src/main/kotlin/…/updater/Ports.kt` exactly as in [contracts/core-api.md](contracts/core-api.md) (`ReleaseSource`, `InstalledAppReader`, `ApkDownloader`, `ApkInspector`, `ApkInstaller` and their result types)
+- [X] T024 [P] [US1] Implement `app/src/main/kotlin/…/updater/data/GitHubReleaseSource.kt`: `HttpURLConnection` GET per [contracts/github-releases.md](contracts/github-releases.md), headers/timeouts/redirects per [contracts/network-policy.md](contracts/network-policy.md) via `NetworkPolicy`, `runInterruptible` on `Dispatchers.IO`, bounded retry via `ResponseMapper`, result through `parseReleases`/`selectRelease`
+- [X] T025 [P] [US1] Implement `app/src/main/kotlin/…/updater/device/InstalledAppReader.kt`: `PackageManager.getPackageInfo` → `InstalledApp` (versionName, longVersionCode, signer SHA-256 set via `GET_SIGNING_CERTIFICATES`); `NameNotFoundException` → not installed
+- [X] T026 [P] [US1] Implement `app/src/main/kotlin/…/updater/data/LastCheckStore.kt` (atomic JSON file in `filesDir`, constructor takes a `File` for testability)
+- [X] T027 [US1] Implement the check part of `app/src/main/kotlin/…/updater/UpdaterViewModel.kt` (`UpdaterUiState`, `check()`, `cancel`, parallel `async` per app, snapshot restore as `Stale`) until T021 and T022 pass
+- [X] T028 [US1] Implement `app/src/main/kotlin/…/updater/MainActivity.kt`: start a check only when `savedInstanceState == null`; cancel running checks/downloads in `onStop` unless `isChangingConfigurations`; no other triggers
+- [X] T029 [P] [US1] Implement UI: `app/src/main/kotlin/…/updater/ui/UpdaterScreen.kt` (top bar with check button, last-checked line, list), `AppRow.kt` (name, installed → latest, status, stale marker), `Messages.kt` (`FailureReason`/status → string resource)
+- [X] T030 [US1] Add all US1 strings (statuses, check button, last checked, stale marker, offline/other failure messages, plural "N updates available") to `values/` and translate into `values-de`, `-fr`, `-es`, `-ja`, `-uk` in `app/src/main/res/`; `LocaleCoverageTest` stays green
 
 **Checkpoint**: US1 independently demonstrable on a device (list + check button, no install).
 
@@ -98,15 +98,15 @@ forbids handing any APK to the installer unverified, so US2 depends on US3's pur
 
 ### Tests for User Story 3 (write first, must fail)
 
-- [ ] T031 [P] [US3] Write `core/src/test/kotlin/…/updater/core/verify/ChecksumFileTest.kt` and `Sha256Test.kt`: `sha256sum` format (`<hex>  <name>`, `<hex> *<name>`), bare hex, upper/lower case, wrong asset name, garbage; hex comparison is case-insensitive and constant-structure
-- [ ] T032 [P] [US3] Write `core/src/test/kotlin/…/updater/core/verify/InstallPolicyTest.kt`: wrong checksum (digest and `.sha256` each), both sources present and one mismatching, no published checksum (allowed), wrong package, archive `versionName` ≠ release version, version equal/older than installed, `versionCode` not newer, different signer set vs. overlapping signer, fresh install without signer comparison; check order sha256 → package → version → signer
+- [X] T031 [P] [US3] Write `core/src/test/kotlin/…/updater/core/verify/ChecksumFileTest.kt` and `Sha256Test.kt`: `sha256sum` format (`<hex>  <name>`, `<hex> *<name>`), bare hex, upper/lower case, wrong asset name, garbage; hex comparison is case-insensitive and constant-structure
+- [X] T032 [P] [US3] Write `core/src/test/kotlin/…/updater/core/verify/InstallPolicyTest.kt`: wrong checksum (digest and `.sha256` each), both sources present and one mismatching, no published checksum (allowed), wrong package, archive `versionName` ≠ release version, version equal/older than installed, `versionCode` not newer, different signer set vs. overlapping signer, fresh install without signer comparison; check order sha256 → package → version → signer
 
 ### Implementation for User Story 3
 
-- [ ] T033 [US3] Implement `core/src/main/kotlin/…/updater/core/verify/Sha256.kt` and `ChecksumFile.kt` until T031 passes
-- [ ] T034 [US3] Implement `core/src/main/kotlin/…/updater/core/verify/InstallPolicy.kt` (`checkDownloadedApk`, `ApkFacts`, `VerifyResult`) until T032 passes
-- [ ] T035 [P] [US3] Implement `app/src/main/kotlin/…/updater/device/ApkInspector.kt`: `getPackageArchiveInfo(path, GET_SIGNING_CERTIFICATES)` → `ApkFacts` (package, versionName, versionCode, signer SHA-256 set); `null` if the file is not a parsable APK
-- [ ] T036 [US3] Add strings for `ChecksumMismatch`, `WrongPackage`, `VersionNotNewer`, `SignatureMismatch` (explains different signing key, no automatic uninstall) in `app/src/main/res/values*/strings.xml` for all six locales
+- [X] T033 [US3] Implement `core/src/main/kotlin/…/updater/core/verify/Sha256.kt` and `ChecksumFile.kt` until T031 passes
+- [X] T034 [US3] Implement `core/src/main/kotlin/…/updater/core/verify/InstallPolicy.kt` (`checkDownloadedApk`, `ApkFacts`, `VerifyResult`) until T032 passes
+- [X] T035 [P] [US3] Implement `app/src/main/kotlin/…/updater/device/ApkInspector.kt`: `getPackageArchiveInfo(path, GET_SIGNING_CERTIFICATES)` → `ApkFacts` (package, versionName, versionCode, signer SHA-256 set); `null` if the file is not a parsable APK
+- [X] T036 [US3] Add strings for `ChecksumMismatch`, `WrongPackage`, `VersionNotNewer`, `SignatureMismatch` (explains different signing key, no automatic uninstall) in `app/src/main/res/values*/strings.xml` for all six locales
 
 **Checkpoint**: Verification gate complete and proven on the JVM; nothing can bypass it in US2.
 

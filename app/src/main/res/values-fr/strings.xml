@@ -1,4 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Updater</string>
+
+    <string name="check_updates">Rechercher des mises à jour</string>
+    <string name="checking">Vérification…</string>
+    <string name="cancel">Annuler</string>
+    <string name="last_checked">Dernière vérification : %1$s</string>
+    <string name="never_checked">Pas encore vérifié</string>
+    <string name="stale_note">Données précédentes, non actualisées</string>
+
+    <string name="version_installed">Installée : %1$s</string>
+    <string name="version_latest">Dernière : %1$s</string>
+    <string name="version_unknown">inconnue</string>
+
+    <string name="status_up_to_date">À jour</string>
+    <string name="status_update_available">Mise à jour disponible</string>
+    <string name="status_not_installed">Non installée</string>
+    <string name="status_no_release">Aucune version disponible</string>
+    <string name="status_no_file">Aucun fichier installable dans la dernière version</string>
+    <string name="status_check_failed">Échec de la vérification</string>
+
+    <plurals name="updates_available">
+        <item quantity="one">%d mise à jour disponible</item>
+        <item quantity="many">%d de mises à jour disponibles</item>
+        <item quantity="other">%d mises à jour disponibles</item>
+    </plurals>
+
+    <string name="failure_offline">Pas de connexion à GitHub</string>
+    <string name="failure_rate_limited">Limite de requêtes GitHub atteinte</string>
+    <string name="failure_rate_limited_until">Limite de requêtes GitHub atteinte. Réessayez après %1$s</string>
+    <string name="failure_server_error">GitHub a renvoyé une erreur (%1$d)</string>
+    <string name="failure_bad_response">Réponse inattendue de GitHub</string>
+    <string name="failure_storage_full">Espace de stockage insuffisant</string>
+    <string name="failure_checksum">Le fichier téléchargé est corrompu ou a été altéré</string>
+    <string name="failure_wrong_package">Le fichier téléchargé appartient à une autre application</string>
+    <string name="failure_version_mismatch">La version du fichier téléchargé ne correspond pas à la publication</string>
+    <string name="failure_version_not_newer">La version téléchargée n’est pas plus récente que celle installée</string>
+    <string name="failure_signature">La mise à jour est signée avec une autre clé que l’application installée. Elle n’a pas été installée et rien n’a été supprimé.</string>
+    <string name="failure_installer_rejected">L’installateur système a refusé la mise à jour (code %1$d)</string>
+    <string name="failure_not_allowed">L’installation d’applications depuis cette source n’est pas encore autorisée</string>
 </resources>
